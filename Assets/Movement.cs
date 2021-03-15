@@ -6,12 +6,14 @@ public class Movement : MonoBehaviour
 {
     // Member variable (available throughout entire class)
     Rigidbody rb;
+    AudioSource audioSource;
     [SerializeField] float thrustForce;
     [SerializeField] float rotationThrust;
 
     void Start() {
         // Caches a reference to our component
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update() {
@@ -22,8 +24,13 @@ public class Movement : MonoBehaviour
     void ProcessThrust() {
         // Use KeyCode.name signature since (string name) sig can be tricky to get correct
         if (Input.GetKey(KeyCode.Space)) { 
-            // //rb.AddRelativeForce(Vector3.up) is the same as the following line
             rb.AddRelativeForce(Vector3.up * thrustForce * Time.deltaTime);
+            
+            if (!audioSource.isPlaying) {
+                audioSource.Play();
+            }
+        } else {
+            audioSource.Stop();
         } 
     }
 
